@@ -1,20 +1,57 @@
 // **npm Packages**
 const inquirer = require('inquirer');
 // // **Core Library Modules
-// const fs = require('fs');
+const fs = require('fs');
 // // **Personal Modules**
-// const generatePage = require('./src/page-template.js');
+const generatePage = require('./src/page-template.js');
+const { markAsUntransferable } = require('worker_threads');
 
-// const pageHTML = generatePage(name, github);
-
-// // first argument is file name that will be created
-// // the second argument is the data thats being written: HTML string template
-// // third argument is the callback function that will handle any errors as well as the success message
-// fs.writeFile('./index.html', pageHTML, err => {
-//     if (err) throw err;
-
-//     console.log('Portfolio complete! Check out index.html to see the output!');
-// });
+// MOCK DATA FOR EASIER TESTING! COMMENT OUT WHEN DONE USING
+const mockData = {
+    name: 'Mark Granade',
+    github: 'MarkGranade',
+    confirmAbout: true,
+    about:
+        'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et.',
+    projects: [
+        {
+            name: 'Run Buddy',
+            description:
+                'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+            languages: ['HTML', 'CSS'],
+            link: 'https://github.com/MarkGranade/run-buddy',
+            feature: true,
+            confirmAddProject: true
+        },
+        {
+            name: 'Taskinator',
+            description:
+                'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+            languages: ['JavaScript', 'HTML', 'CSS'],
+            link: 'https://github.com/MarkGranade/taskinator',
+            feature: false,
+            confirmAddProject: true
+        },
+        {
+            name: 'Taskmaster Pro',
+            description:
+                'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+            languages: ['JavaScript', 'jQuery', 'CSS', 'HTML', 'Bootstrap'],
+            link: 'https://github.com/MarkGranade/taskmaster-pro',
+            feature: false,
+            confirmAddProject: true
+        },
+        {
+            name: 'Robot Gladiators',
+            description:
+                'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque.',
+            languages: ['JavaScript'],
+            link: 'https://github.com/MarkGranade/robot-gladiators',
+            feature: true,
+            confirmAddProject: false
+        }
+    ]
+};
 
 // Inquirer function to prompt questions and recieve answers
 const promptUser = () => {
@@ -84,8 +121,8 @@ Add a New Project
             type: 'input',
             name: 'name',
             message: 'What is the name of your project? (Required)',
-            validate: projectNameInput => {
-                if (projectNameInput) {
+            validate: nameInput => {
+                if (nameInput) {
                     return true;
                 } else {
                     console.log('Please enter your name!');
@@ -97,8 +134,8 @@ Add a New Project
             type: 'input',
             name: 'description',
             message: 'Provide a description of the project (Required)',
-            validate: projectDescription => {
-                if (projectDescription) {
+            validate: descriptionInput => {
+                if (descriptionInput) {
                     return true;
                 } else {
                     console.log('Please enter your name!');
@@ -116,8 +153,8 @@ Add a New Project
             type: 'input',
             name: 'link',
             message: 'Enter the GitHub link to your project (Required)',
-            validate: githubLink => {
-                if (githubLink) {
+            validate: linkInput => {
+                if (linkInput) {
                     return true;
                 } else {
                     console.log('Please enter your name!');
@@ -148,8 +185,27 @@ Add a New Project
     });
 };
 
-promptUser()
-    .then(promptProject)
-    .then(portfolioData => {
-        console.log(portfolioData);
+// REMOVE THIS AND UNCOMMENT OUT promptUser() FUNCTION WHEN DONE USING MOCK DATA
+function writeToFile(mockData) {
+    fs.writeFile('./index.html', pageHTML, err => {
+        if (err) throw err;
+        console.log('Success');
     });
+};
+
+const pageHTML = generatePage(mockData);
+writeToFile(mockData);
+
+// *******************************************************************************************************************
+
+// promptUser()
+//     .then(promptProject)
+//     .then(portfolioData => {
+//         const pageHTML = generatePage(portfolioData);
+
+//         fs.writeFile('./index.html', pageHTML, err => {
+//             if (err) throw new Error(err);
+//         });
+//     });  
+
+// *******************************************************************************************************************
